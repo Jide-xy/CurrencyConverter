@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <ImageButton
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+            app:srcCompat="@drawable/ic_sort" />
+
+        <Button
+            android:id="@+id/signUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="@string/sign_up"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/currency_calculator"
+            android:textColor="@color/colorPrimary"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@+id/icon" />
+
+        <EditText
+            android:id="@+id/fromEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/input_bg"
+            android:digits="0123456789,."
+            android:hint="@string/enter_value"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/icon"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/fromCurrencyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:textColor="#c4c4c4"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/fromEditText"
+            app:layout_constraintEnd_toEndOf="@id/fromEditText"
+            app:layout_constraintTop_toTopOf="@id/fromEditText"
+            tools:text="EUR" />
+
+        <TextView
+            android:id="@+id/toTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/input_bg"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/icon"
+            app:layout_constraintTop_toBottomOf="@+id/fromEditText"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/toCurrencyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:textColor="#c4c4c4"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/toTextView"
+            app:layout_constraintEnd_toEndOf="@id/toTextView"
+            app:layout_constraintTop_toTopOf="@id/toTextView"
+            tools:text="EUR" />
+
+        <Spinner
+            android:id="@+id/fromSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/spinner_bg_layer_list"
+            app:layout_constraintEnd_toStartOf="@+id/convertIcon"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/toTextView"
+            app:layout_constraintTop_toBottomOf="@+id/toTextView"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        <ImageView
+            android:id="@+id/convertIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fromSpinner"
+            app:layout_constraintEnd_toStartOf="@+id/toSpinner"
+            app:layout_constraintStart_toEndOf="@id/fromSpinner"
+            app:layout_constraintTop_toTopOf="@+id/fromSpinner"
+            app:srcCompat="@drawable/ic_swap_horiz" />
+
+        <Spinner
+            android:id="@+id/toSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_bg_layer_list"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toEndOf="@id/convertIcon"
+            app:layout_constraintTop_toTopOf="@+id/fromSpinner"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        <Button
+            android:id="@+id/convertButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/form_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="@string/convert"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/fromEditText"
+            app:layout_constraintStart_toStartOf="@id/fromEditText"
+            app:layout_constraintTop_toBottomOf="@+id/fromSpinner"
+            tools:enabled="false" />
+
+        <TextView
+            android:id="@+id/ratesLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/mid_market_exchange_rate_at_13_38_utc"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/info"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/convertButton" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/oval_bg"
+            android:gravity="center"
+            android:text="i"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/ratesLink"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ratesLink"
+            app:layout_constraintTop_toTopOf="@+id/ratesLink" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_rates_layout"
+            android:paddingBottom="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/ratesTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorGravity="bottom"
+                app:tabIndicatorHeight="6dp"
+                app:tabRippleColor="#11FFFFFF"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@color/gray">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/past_30_days" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/past_90_days" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratesTab" />
+
+            <TextView
+                android:id="@+id/ratesAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/get_rates_alert_straight_to_your_inbox"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lineChart" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/progressBarBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#AA000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBarBackground"
+            app:layout_constraintEnd_toEndOf="@+id/progressBarBackground"
+            app:layout_constraintStart_toStartOf="@+id/progressBarBackground"
+            app:layout_constraintTop_toTopOf="@+id/progressBarBackground" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fetching_rates"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/progressBarBackground"
+            app:layout_constraintStart_toStartOf="@+id/progressBarBackground"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/progressBarLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="progressText,progressBar,progressBarBackground"
+            tools:visibility="gone" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="?actionBarSize" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
