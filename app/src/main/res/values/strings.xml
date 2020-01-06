@@ -10,4 +10,6 @@
     <string name="enter_value">Enter value</string>
     <string name="get_rates_alert_straight_to_your_inbox"><u>Get rates alert straight to your inbox</u></string>
     <string name="flag">flag</string>
+    <string name="i">i</string>
+    <string name="indicator">indicator</string>
 </resources>

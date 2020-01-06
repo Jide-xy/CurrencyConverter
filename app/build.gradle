@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -15,10 +17,11 @@ android {
         applicationId "com.currency.converter.demo"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        testOptions.unitTests.includeAndroidResources = true
     }
     buildTypes {
         release {
@@ -36,6 +39,13 @@ android {
     }
 }
 
+android.applicationVariants.all {
+    variant ->
+        variant.outputs.all {
+            outputFileName = "curr_converter_${versionName}_${new SimpleDateFormat("dd-MM-yyyy").format(new Date())}.apk"
+        }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -47,7 +57,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     kapt 'androidx.annotation:annotation:1.1.0'
+    testImplementation 'org.robolectric:robolectric:4.3'
 
     // Core library
     androidTestImplementation 'androidx.test:core:1.2.0'
@@ -60,21 +72,27 @@ dependencies {
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:2.22.0'
     testImplementation "org.mockito:mockito-all:1.10.19"
-    testImplementation "org.mockito:mockito-android:2.22.0"
+//    testImplementation "org.mockito:mockito-android:2.22.0"
 
-    androidTestImplementation 'org.mockito:mockito-core:2.22.0'
+//    androidTestImplementation 'org.mockito:mockito-core:2.22.0'
     androidTestImplementation "org.mockito:mockito-android:2.22.0"
     //Mock web server
     testImplementation "com.squareup.okhttp3:mockwebserver:3.10.0"
+    //PowerMock
+//    testImplementation "org.powermock:powermock-module-junit4:1.7.4"
+//    testImplementation "org.powermock:powermock-module-junit4-rule:1.6.6"
+//    testImplementation "org.powermock:powermock-api-mockito:1.7.4"
+//    testImplementation "org.powermock:powermock-classloading-xstream:1.6.6"
     //cardview
     implementation 'androidx.cardview:cardview:1.0.0'
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:retrofit-mock:2.6.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit-mock:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
     // ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha03'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha03'
+    kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha03'
     testImplementation 'androidx.arch.core:core-testing:2.0.1'
     //WorkManager
     def work_version = "1.0.1"
@@ -92,13 +110,11 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Glide
     implementation "com.github.bumptech.glide:glide:4.9.0"
-//    {
-//        exclude group: "com.android.support"
-//    }
-//    implementation ("com.github.bumptech.glide:glide:4.9.0@aar"){
-//        transitive = true
-//    }
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
+// RxAndroid
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
 }
 
 

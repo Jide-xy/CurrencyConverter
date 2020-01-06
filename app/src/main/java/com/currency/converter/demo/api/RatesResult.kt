@@ -11,6 +11,8 @@ data class RatesResult(
     val timestamp: Long,
     @SerializedName("base")
     val base: String,
+    @SerializedName("historical")
+    val historical: Boolean = false,
     @SerializedName("rates")
     val rates: Map<String, Double>
 )

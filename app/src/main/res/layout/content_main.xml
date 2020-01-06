@@ -170,7 +170,7 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/oval_bg"
             android:gravity="center"
-            android:text="i"
+            android:text="@string/i"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/ratesLink"
             app:layout_constraintDimensionRatio="W,1:1"
@@ -216,10 +216,25 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratesTab" />
+
+            <ProgressBar
+                android:id="@+id/historicalRatesProgressBar"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/lineChart"
+                app:layout_constraintEnd_toEndOf="@+id/lineChart"
+                app:layout_constraintStart_toStartOf="@+id/lineChart"
+                app:layout_constraintTop_toTopOf="@+id/lineChart" />
 
             <TextView
                 android:id="@+id/ratesAlert"

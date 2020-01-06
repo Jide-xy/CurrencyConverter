@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.Provides
 import io.realm.Realm
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -36,6 +37,7 @@ class AppModule {
         return Retrofit.Builder()
             .baseUrl("http://data.fixer.io/api/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
             .create(RatesService::class.java)
     }

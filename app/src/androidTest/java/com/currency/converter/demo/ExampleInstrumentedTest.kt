@@ -2,6 +2,7 @@ package com.currency.converter.demo
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import androidx.test.runner.AndroidJUnitRunner
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +12,7 @@ import org.junit.runner.RunWith
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnitRunner::class)
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
