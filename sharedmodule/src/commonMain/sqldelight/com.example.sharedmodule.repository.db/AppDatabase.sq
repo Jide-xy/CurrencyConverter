@@ -1,0 +1,5 @@
+CREATE TABLE RateEntity  (
+    currency_code TEXT NOT NULL PRIMARY KEY,
+    base_currency_code TEXT NOT NULL,
+    rate REAL NOT NULL DEFAULT 0.0
+);
