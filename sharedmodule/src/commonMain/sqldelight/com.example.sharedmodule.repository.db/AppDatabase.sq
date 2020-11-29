@@ -3,3 +3,10 @@ CREATE TABLE RateEntity  (
     base_currency_code TEXT NOT NULL,
     rate REAL NOT NULL DEFAULT 0.0
 );
+
+getAllRates:
+SELECT *
+FROM RateEntity;
+
+insertRate:
+INSERT OR REPLACE INTO RateEntity VALUES ?;

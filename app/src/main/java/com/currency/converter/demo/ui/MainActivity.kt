@@ -16,15 +16,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.currency.converter.demo.R
-import com.currency.converter.demo.api.Resource
-import com.currency.converter.demo.api.Status.*
-import com.currency.converter.demo.models.CurrencyRate
 import com.currency.converter.demo.util.Utils
+import com.example.sharedmodule.model.CurrencyRate
+import com.example.sharedmodule.util.NetworkStatus
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.MarkerView
@@ -68,8 +66,8 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     var toSelectedIndex = -1
 
-    var thirtyDaysHistoricalRates: MutableList<MutableMap<String, List<CurrencyRate>>> = mutableListOf()
-    var ninetyDaysHistoricalRates: MutableList<MutableMap<String, List<CurrencyRate>>> = mutableListOf()
+    var thirtyDaysHistoricalRates: List<Map<String, List<CurrencyRate>>> = emptyList()
+    var ninetyDaysHistoricalRates: List<Map<String, List<CurrencyRate>>> = emptyList()
     var dates = mutableMapOf<Float, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,11 +95,12 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         titleTextView.text = spannableString
     }
 
-    private fun observeLiveData(){
-        viewModel.ratesLiveData.observe(this,
-            Observer<Resource<List<CurrencyRate>>> {
-                when (it.status) {
-                    SUCCESS -> {
+    private fun observeLiveData() {
+        viewModel.ratesLiveData.observe(
+            this,
+            {
+                when (it) {
+                    is NetworkStatus.Success -> {
                         progressBarLayout.visibility = GONE
                         if (!it.data.isNullOrEmpty()) {
                             currencyRates = it.data.toMutableList()
@@ -109,65 +108,68 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
                             enableAllButtons()
                         }
                     }
-                    ERROR -> {
+                    is NetworkStatus.Error -> {
                         progressBarLayout.visibility = GONE
                         if (adapter.count == 0) disableAllButtons()
-                        Snackbar.make(progressBar, it.message ?: "Failed to fetch rates", Snackbar.LENGTH_LONG)
+                        Snackbar.make(progressBar, it.message, Snackbar.LENGTH_LONG)
                             .setAction("RETRY") {
                                 viewModel.getRates()
                             }.show()
                     }
-                    LOADING -> {
+                    is NetworkStatus.Loading -> {
                         disableAllButtons()
                         progressBarLayout.visibility =
                             if (it.data?.isNullOrEmpty() == true) VISIBLE else GONE //blur background on cold launch
                         if (!it.data.isNullOrEmpty()) {
-                            currencyRates = it.data.toMutableList()
+                            currencyRates = it.data.orEmpty().toMutableList()
                             adapter.updateList(currencyRates)
                             enableAllButtons()
                         }
                     }
                 }
             })
-        viewModel.historicalRatesLiveData.observe(this,
-            Observer<Result> {
-                when (it.numberOfDays){
-                    30->{
-                        when (it.data.status) {
-                            SUCCESS -> {
-                                thirtyDaysHistoricalRates = it.data.data ?: mutableListOf()
-                                if (fromSelectedIndex >= 0 && toSelectedIndex >= 0){
+        viewModel.historicalRatesLiveData.observe(
+            this,
+            {
+                when (it.numberOfDays) {
+                    30 -> {
+                        when (it.data) {
+                            is NetworkStatus.Success -> {
+                                thirtyDaysHistoricalRates = it.data.data
+                                if (fromSelectedIndex >= 0 && toSelectedIndex >= 0) {
                                     buildHistoricalRatesGraph(ratesTab.selectedTabPosition)
                                 }
                                 historicalRatesProgressBar.visibility = GONE
                             }
-                            ERROR -> {
-                                Snackbar.make(progressBar, it.data.message ?: "Failed to fetch historical rates", Snackbar.LENGTH_LONG)
+                            is NetworkStatus.Error -> {
+                                Snackbar.make(progressBar, it.data.message, Snackbar.LENGTH_LONG)
                                     .setAction("RETRY") {
                                         viewModel.getHistoricalRates(30)
                                     }.show()
                                 historicalRatesProgressBar.visibility = VISIBLE
                             }
-                            LOADING -> historicalRatesProgressBar.visibility = VISIBLE
+                            is NetworkStatus.Loading -> historicalRatesProgressBar.visibility =
+                                VISIBLE
                         }
                     }
-                    90 ->{
-                        when (it.data.status) {
-                            SUCCESS -> {
-                                ninetyDaysHistoricalRates = it.data.data ?: mutableListOf()
-                                if (fromSelectedIndex >= 0 && toSelectedIndex >= 0){
+                    90 -> {
+                        when (it.data) {
+                            is NetworkStatus.Success -> {
+                                ninetyDaysHistoricalRates = it.data.data
+                                if (fromSelectedIndex >= 0 && toSelectedIndex >= 0) {
                                     buildHistoricalRatesGraph(ratesTab.selectedTabPosition)
                                 }
                                 historicalRatesProgressBar.visibility = GONE
                             }
-                            ERROR -> {
-                                Snackbar.make(progressBar, it.data.message ?: "Failed to fetch historical rates", Snackbar.LENGTH_LONG)
+                            is NetworkStatus.Error -> {
+                                Snackbar.make(progressBar, it.data.message, Snackbar.LENGTH_LONG)
                                     .setAction("RETRY") {
                                         viewModel.getHistoricalRates(90)
                                     }.show()
                                 historicalRatesProgressBar.visibility = VISIBLE
                             }
-                            LOADING -> historicalRatesProgressBar.visibility = VISIBLE
+                            is NetworkStatus.Loading -> historicalRatesProgressBar.visibility =
+                                VISIBLE
                         }
                     }
                 }
@@ -175,23 +177,26 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     }
 
     private fun buildHistoricalRatesGraph(tabPosition: Int){
-        var historicalRates = mutableListOf<MutableMap<String, List<CurrencyRate>>>()
+        var historicalRates = listOf<Map<String, List<CurrencyRate>>>()
         when (tabPosition){
-            0->{
+            0 -> {
                 historicalRates = thirtyDaysHistoricalRates
             }
-            1->{
+            1 -> {
                 historicalRates = ninetyDaysHistoricalRates
             }
         }
         setUpLineChart(historicalRates, tabPosition)
     }
 
-    private fun setUpLineChart(historicalRates: MutableList<MutableMap<String, List<CurrencyRate>>>, tabPosition: Int) {
+    private fun setUpLineChart(
+        historicalRates: List<Map<String, List<CurrencyRate>>>,
+        tabPosition: Int
+    ) {
         val entries = mutableListOf<Entry>()
         dates.clear()
-        if (historicalRates.size != 0){
-            for ((index,entry) in historicalRates.withIndex()){
+        if (historicalRates.isNotEmpty()) {
+            historicalRates.forEachIndexed { index, entry ->
                 val fromCurrencyCode = currencyRates[fromSelectedIndex].currencyCode
                 val toCurrencyCode = currencyRates[toSelectedIndex].currencyCode
                 val fromCurrencyRate = entry.values.toList()[0].find {
@@ -200,13 +205,13 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
                 val toCurrencyRate = entry.values.toList()[0].find {
                     it.currencyCode == toCurrencyCode
                 }
-                if (fromCurrencyRate == null || toCurrencyRate == null){
-                    continue
+                if (fromCurrencyRate == null || toCurrencyRate == null) {
+                    return@forEachIndexed
                 }
                 if (fromCurrencyRate.baseCurrencyCode == toCurrencyRate.baseCurrencyCode) {
                     val convertedValue = toCurrencyRate.rate / fromCurrencyRate.rate
                     dates[index.toFloat()] = entry.keys.toList()[0]
-                    entries.add(Entry(index.toFloat(),convertedValue.toFloat()))
+                    entries.add(Entry(index.toFloat(), convertedValue.toFloat()))
                 }
             }
             val dataSet = LineDataSet(entries, "Last ${if (tabPosition == 0) 30 else 90} days")
@@ -217,7 +222,8 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
                 setDrawFilled(true)
                 setDrawHighlightIndicators(false)
                 lineWidth = 0f
-                fillDrawable = ResourcesCompat.getDrawable(resources,R.drawable.graph_filled_area_bg, theme)
+                fillDrawable =
+                    ResourcesCompat.getDrawable(resources, R.drawable.graph_filled_area_bg, theme)
             }
             val lineData = LineData(dataSet)
             lineData.setValueTextColor(Color.WHITE)

@@ -16,42 +16,19 @@
 
 package com.currency.converter.demo.di
 
+import android.app.Application
 import com.currency.converter.demo.CCApplication
-import com.currency.converter.demo.api.RatesService
-import com.currency.converter.demo.repository.IRepository
-import com.currency.converter.demo.repository.RepositoryImpl
+import com.example.sharedmodule.di.SharedModule
 import dagger.Module
 import dagger.Provides
-import io.realm.Realm
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Module(includes = [ViewModelModule::class])
+@Module(includes = [ViewModelModule::class, SharedModule::class])
 class AppModule {
 
     @Singleton
     @Provides
-    fun provideRatesService(): RatesService {
-        return Retrofit.Builder()
-            .baseUrl("http://data.fixer.io/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-            .create(RatesService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideDb(app: CCApplication): Realm {
-        Realm.init(app.applicationContext)
-        return Realm.getDefaultInstance()
-    }
-
-    @Singleton
-    @Provides
-    fun provideRepository(realmDb: Realm, ratesService: RatesService): IRepository {
-        return RepositoryImpl(realmDb, ratesService)
+    fun provideApp(app: CCApplication): Application {
+        return app
     }
 }

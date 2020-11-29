@@ -1,4 +1,4 @@
-package com.example.sharedmodule.repository
+package com.example.sharedmodule.model
 
 data class CurrencyRate(
     val currencyCode: String,

@@ -1,18 +1,38 @@
 package com.currency.converter.demo.ui
 
 import androidx.lifecycle.*
-import com.currency.converter.demo.api.Resource
-import com.currency.converter.demo.models.CurrencyRate
-import com.currency.converter.demo.repository.IRepository
+import com.example.sharedmodule.model.CurrencyRate
+import com.example.sharedmodule.repository.Repository
+import com.example.sharedmodule.util.NetworkStatus
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(val repository: IRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val sharedRepository: Repository) : ViewModel() {
 
-    private val _ratesLiveData: MutableLiveData<Resource<List<CurrencyRate>>> = MutableLiveData()
-    val ratesLiveData: LiveData<Resource<List<CurrencyRate>>>
-        get() = _ratesLiveData
+    private val _ratesLiveData: MutableLiveData<Unit> = MutableLiveData()
+    val ratesLiveData: LiveData<NetworkStatus<List<CurrencyRate>>> =
+        Transformations.switchMap(_ratesLiveData) {
+            sharedRepository.fetchRates().asLiveData()
+        }
 
-    private val _historicalRatesLiveData: MediatorLiveData<Result> = MediatorLiveData()
+    private val _thirtyDaysLiveData: MutableLiveData<Int> = MutableLiveData()
+    private val thirtyDaysLiveData = _thirtyDaysLiveData.switchMap {
+        sharedRepository.getHistoricalRates(it).asLiveData()
+    }
+
+    private val _ninetyDaysLiveData: MutableLiveData<Int> = MutableLiveData()
+    private val ninetyDaysLiveData = _ninetyDaysLiveData.switchMap {
+        sharedRepository.getHistoricalRates(it).asLiveData()
+    }
+
+    private val _historicalRatesLiveData: MediatorLiveData<Result> =
+        MediatorLiveData<Result>().apply {
+            addSource(thirtyDaysLiveData) {
+                value = Result(30, it)
+            }
+            addSource(ninetyDaysLiveData) {
+                value = Result(90, it)
+            }
+        }
     val historicalRatesLiveData: LiveData<Result>
         get() = _historicalRatesLiveData
 
@@ -22,17 +42,17 @@ class MainViewModel @Inject constructor(val repository: IRepository) : ViewModel
     }
 
     fun getRates() {
-        repository.getRates(_ratesLiveData)
+        _ratesLiveData.value = Unit
     }
 
     fun getHistoricalRates(numberOfDays: Int) {
-        val result = repository.getHistoricalRates(numberOfDays)
-        _historicalRatesLiveData.addSource(result)
-         {
-//            _historicalRatesLiveData.removeSource(result)
-            _historicalRatesLiveData.value = Result(numberOfDays, it)
-        }
+        if (numberOfDays == 30) {
+            _thirtyDaysLiveData.value = numberOfDays
+        } else _ninetyDaysLiveData.value = numberOfDays
     }
 }
 
-data class Result(val numberOfDays: Int, val data: Resource<MutableList<MutableMap<String, List<CurrencyRate>>>>)
+data class Result(
+    val numberOfDays: Int,
+    val data: NetworkStatus<List<Map<String, List<CurrencyRate>>>>
+)

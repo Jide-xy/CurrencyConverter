@@ -8,8 +8,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'realm-android'
-
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
@@ -37,6 +35,9 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -72,28 +73,18 @@ dependencies {
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:2.22.0'
     testImplementation "org.mockito:mockito-all:1.10.19"
-//    testImplementation "org.mockito:mockito-android:2.22.0"
-
-//    androidTestImplementation 'org.mockito:mockito-core:2.22.0'
     androidTestImplementation "org.mockito:mockito-android:2.22.0"
     //Mock web server
     testImplementation "com.squareup.okhttp3:mockwebserver:3.10.0"
-    //PowerMock
-//    testImplementation "org.powermock:powermock-module-junit4:1.7.4"
-//    testImplementation "org.powermock:powermock-module-junit4-rule:1.6.6"
-//    testImplementation "org.powermock:powermock-api-mockito:1.7.4"
-//    testImplementation "org.powermock:powermock-classloading-xstream:1.6.6"
     //cardview
     implementation 'androidx.cardview:cardview:1.0.0'
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:retrofit-mock:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
     // ViewModel and LiveData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha03'
-    kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha03'
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
+    def lifecycleVersion = "2.2.0"
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     //WorkManager
     def work_version = "1.0.1"
     implementation "android.arch.work:work-runtime:${work_version}"
@@ -111,13 +102,11 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:4.9.0"
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
-    // RxJava
-    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
-// RxAndroid
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
     //multidex
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
+
+    implementation(project(":sharedmodule"))
 }
 
 
