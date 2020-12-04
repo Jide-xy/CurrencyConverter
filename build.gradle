@@ -1,8 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.20'
     ext.sql_delight_version = '1.4.3'
+    ext.dagger_hilt_version = "2.28-alpha"
     repositories {
         google()
         jcenter()
@@ -14,6 +15,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.squareup.sqldelight:gradle-plugin:$sql_delight_version"
         classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_hilt_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

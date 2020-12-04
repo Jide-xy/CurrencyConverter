@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="sharedmodule-jvm">
-    <output-path>$PROJECT_DIR$/sharedmodule/build/libs</output-path>
-    <root id="archive" name="sharedmodule-jvm.jar">
-      <element id="module-output" name="CurrencyConverter.sharedmodule.jvmMain" />
-    </root>
-  </artifact>
-</component>
